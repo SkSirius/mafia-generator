@@ -1,0 +1,93 @@
+<!doctype html>
+<html ng-app='Randomizer'>
+	<head>
+		<link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.min.css' />
+	</head>
+	<body ng-controller='AppController' style='margin: 30px;'>
+		<div class='row'>
+			<div class='col-md-4'>
+				<div class='row'>
+					<form>
+						<span>Додати команду:</span>
+						<div class='form-group col-md-12'>
+							<label for='txtTeamName'>Назва команди:</label>
+							<input type='text' ng-model='team.name' class='form-control' id='txtTeamName' />
+						</div>
+						<div class='form-group col-md-12'>
+							<button ng-click='addTeam(team.name)' class='btn btn-success' type='submit'>Додати</button>
+						</div>
+					</form>
+				</div>
+				<div class='row'>
+					<form>
+						<span>Додати гравця:</span>
+						<div class='form-group col-md-12'>
+							<label for='txtPlayerName'>Ім'я та Прізвище Гравця:</label>
+							<input type='text' ng-model='player.fullName' class='form-control' id='txtPlayerName' />
+						</div>
+						<div class='form-group col-md-12'>
+							<label for='ddlTeam'>Команда:</label>
+							<select id='ddlTeam' ng-options="team as team.name for team in teamList track by team.number" ng-model="player.team">
+							</select>
+						</div>
+						<div class='form-group col-md-12'>
+							<button ng-click='addPlayer(player)' class='btn btn-success' type='submit'>Додати</button>
+						</div>
+					</form>
+				</div>
+				<br />
+				<div class='row'>
+					<button class='btn btn-warning' ng-click='clearStorage()'>Очистити Все</button>
+					<button class='btn btn-success' ng-click='randomize()'>Згенерувати ігри</button>
+				</div>
+			</div>
+			<div class='col-md-8'>
+				<table class='table table-striped'>
+					<thead>
+						<tr>
+							<th>Номер</th>
+							<th>Гравець</th>
+							<th>Команда</th>
+							<th>К-ть ігор</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat='player in playerList'>
+							<td>{{ $index + 1 }}</td>
+							<td>{{ player.fullName }}</td>
+							<td>{{ player.team.name }}</td>
+							<td>{{ player.tablesPlaying }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<h2 ng-show='roundList.length > 0'>Результати жеребкування:</h2>
+		<div class='row' ng-repeat='round in roundList'>
+			<h3>Раунд {{ $index + 1}}</h3>
+			<div class='col-md-3' ng-repeat='table in round'>
+				<h4 ng-if='$index < 4 '>Стіл {{ $index + 1}}</h4>
+				<table ng-show='$index < 4' class='table table-striped'>
+					<thead>
+						<tr>
+							<th>Гравець</th>
+							<th>Команда</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat='player in table'>
+							<td>{{ player.fullName }}</td>
+							<td>{{ player.team.name }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</body>
+	<script type='text/javascript' src="bower_components/angular/angular.min.js"></script>
+	<script type='text/javascript' src="bower_components/ngstorage/ngStorage.min.js"></script>
+	<script type='text/javascript' src="bower_components/underscore/underscore-min.js"></script>
+	<script type='text/javascript' src="bower_components/angular-underscore/angular-underscore.min.js"></script>
+	<script type='text/javascript' src='app.js'></script>
+</html>
